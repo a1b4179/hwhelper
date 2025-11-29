@@ -14,7 +14,7 @@ def after_request(response):
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({
-        'message': '🎓 HWHelper API',
+        'message': 'HWHelper API',
         'status': 'online'
     })
 
@@ -32,11 +32,21 @@ def solve():
         question = data.get('question', '')
         subject = data.get('subject', 'General')
         
-        # Simple response for now (we'll add AI later)
-        solution = f"""# {subject} Solution
+        # Simple demo response
+        solution = f"# {subject} Solution\n\n## Your Question:\n{question}\n\n## Answer:\nThis is a demo response. API is working!\n\nNext we'll add AI agents."
+        
+        return jsonify({
+            'success': True,
+            'solution': solution
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
-## Your Question:
-{question}
-
-## Answer:
-This is a demo response. We'll connect the AI agents next!
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
